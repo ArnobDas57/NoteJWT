@@ -43,7 +43,11 @@ authRouter.post("/register", async (req, res) => {
     const { data: existingUsers, error: checkError } = await supabase
       .from("users")
       .select("*")
-      .or(`username.eq.${encodeURIComponent(username)},email.eq.${encodeURIComponent(email)}`);
+      .or(
+        `username.eq.${encodeURIComponent(
+          username
+        )},email.eq.${encodeURIComponent(email)}`
+      );
 
     if (checkError) throw checkError;
 
@@ -60,7 +64,7 @@ authRouter.post("/register", async (req, res) => {
 
     const { data: newUser, error: insertError } = await supabase
       .from("users")
-      .insert([{ username, email, password: hashedPassword }])
+      .insert({ username, email, password: hashedPassword })
       .select("user_id, username")
       .single();
 
